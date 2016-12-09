@@ -35,10 +35,16 @@ rankC=rank(Com)
 %controllability
 %Ctrl=(rankC==length(Com))
 
+%observability
+obs=obsv(system)
+rankObs=rank(obs)
+
 %state feedback : set up poles
 Pcom=[-1 -5]
+Pobs=[-10 -50]
 display('state feedback poles (continous)')
 K=place(A, B, Pcom) %see also : fct acker()
+L=place(A', C', Pobs)
 
 %Discrete
 Tech=0.1
