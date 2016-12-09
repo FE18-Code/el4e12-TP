@@ -37,8 +37,17 @@ rankC=rank(Com)
 
 %state feedback : set up poles
 Pcom=[-1 -5]
-display('state feedback poles')
+display('state feedback poles (continous)')
 K=place(A, B, Pcom) %see also : fct acker()
+
+%Discrete
+Tech=0.1
+[Ad, Bd, Cd, Dd]=c2dm(A, B, C, D, Tech, 'zoh'); %continous to discrete conv
+
+%state feedback : set up poles (discrete)
+Pcom_discrete=[0.5 0.5]
+display('state feedback poles (discrete)')
+Kd=acker(Ad, Bd, Pcom_discrete)
 
 %input scaling; unit loop gain (when established)
 %N=inv([A, B;C, D])*[zeros([1, size(A, 1)]) 1];
@@ -48,16 +57,30 @@ K=place(A, B, Pcom) %see also : fct acker()
 
 %start Simulink model
 sim('model_statex')
+sim('model_statex_discrete')
 
-%display
+%display (continous)
 figure(2)
 subplot(211)
 plot(time, input), grid
 axis([0 max(time) -0.1 1.5])
-title('command signal')
+title('command signal (continous)')
 subplot(212)
 %hold on
 plot(time, states), grid
 axis([0 max(time) -1 1.5])
 xlabel('time')
-title('output signal')
+title('output signal (continous)')
+
+%display (discrete)
+figure(3)
+subplot(211)
+plot(time_discrete, input_discrete), grid
+axis([0 max(time_discrete) -0.1 1.5])
+title('command signal (discrete)')
+subplot(212)
+%hold on
+plot(time_discrete, states_discrete), grid
+axis([0 max(time_discrete) -1 1.5])
+xlabel('time')
+title('output signal (discrete)')
