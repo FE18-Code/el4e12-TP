@@ -35,10 +35,16 @@ rankC=rank(Com)
 %controllability
 %Ctrl=(rankC==length(Com))
 
+%observability
+obs=obsv(system)
+rankObs=rank(obs)
+
 %state feedback : set up poles
 Pcom=[-2 -2 -7]
+Pobs=[-10 -50 -10]
 display('state feedback poles (continous)')
 K=acker(A, B, Pcom) %see also : fct acker()
+L=acker(A', C', Pobs)
 
 %input scaling; unit loop gain (when established)
 %N=inv([A, B;C, D])*[zeros([1, size(A, 1)]) 1];
@@ -49,15 +55,16 @@ K=acker(A, B, Pcom) %see also : fct acker()
 %start Simulink model
 sim('model_statex')
 
-%display
+%display (continous)
 figure(2)
 subplot(211)
 plot(time, input), grid
 axis([0 max(time) -0.1 1.5])
-title('command signal')
+title('command signal (continous)')
 subplot(212)
 %hold on
 plot(time, states), grid
 axis([0 max(time) -1 1.5])
 xlabel('time')
-title('output signal')
+title('output signal (continous)')
+
