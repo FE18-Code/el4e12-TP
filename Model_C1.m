@@ -4,14 +4,14 @@
 %Model_C1.m
 
 clear all, close all, clc,
-A=[0 1;5 -4]
-B=[0;1]
-C=[1 0]
+A=[-5 -3 0;-4 -2.5 0;0 1 0]
+B=[0.15;-0.1;0]
+C=[0 0 1]
 D=0
 
 %Simulink variables
 Nbar=1
-Step_final=4
+Step_final=1
 
 %system: poles
 poles=eig(A)
@@ -36,9 +36,9 @@ rankC=rank(Com)
 %Ctrl=(rankC==length(Com))
 
 %state feedback : set up poles
-Pcom=[-1 -5]
-display('state feedback poles')
-K=place(A, B, Pcom) %see also : fct acker()
+Pcom=[-2 -2 -7]
+display('state feedback poles (continous)')
+K=acker(A, B, Pcom) %see also : fct acker()
 
 %input scaling; unit loop gain (when established)
 %N=inv([A, B;C, D])*[zeros([1, size(A, 1)]) 1];
