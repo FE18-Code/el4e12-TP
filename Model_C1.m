@@ -4,9 +4,18 @@
 %Model_C1.m
 
 clear all, close all, clc,
-A=[0 1;5 -4]
-B=[0;1]
-C=[1 0]
+
+%Model variables
+Mchar=900; %Mchar=900 kg
+Mbal=500; %Mbal=500 kg
+Len=10; %Len=10 m
+g=9.81; %g=9.81 m/s^2
+Gs=100; %Gs=100 N/V
+tau=1; %tau=1 s
+
+A=[0 1 0 0 0;0 0 ((Mbal/Mchar)*g) 0 (1/Mchar);0 0 0 1 0;0 0 -((1+Mbal/Mchar)*(g/Len)) 0 -(1/Mchar*Len);0 0 0 0 -(1/tau)]
+B=[0;0;0;0;Gs/tau]
+C=[1 0 Len 0 0]
 D=0
 
 %Simulink variables
@@ -36,9 +45,9 @@ rankC=rank(Com)
 %Ctrl=(rankC==length(Com))
 
 %state feedback : set up poles
-Pcom=[-1 -5]
+Pcom=[-1 -1 -1 -0.15+0.15*i -0.15-0.15*i]
 display('state feedback poles')
-K=place(A, B, Pcom) %see also : fct acker()
+K=acker(A, B, Pcom) %see also : fct acker()
 
 %input scaling; unit loop gain (when established)
 %N=inv([A, B;C, D])*[zeros([1, size(A, 1)]) 1];
