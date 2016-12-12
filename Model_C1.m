@@ -41,7 +41,7 @@ rankObs=rank(obs)
 
 %state feedback : set up poles
 Pcom=[-2 -2 -7]
-Pobs=[-10 -50 -10]
+Pobs=Pcom*4
 display('state feedback poles (continous)')
 K=acker(A, B, Pcom) %see also : fct acker()
 L=acker(A', C', Pobs)
@@ -64,7 +64,7 @@ title('command signal (continous)')
 subplot(212)
 %hold on
 plot(time, states), grid
-axis([0 max(time) -1 1.5])
+axis([0 max(time) -0.5 0.5])
 xlabel('time')
 title('output signal (continous)')
 
